@@ -3,6 +3,7 @@ import csv
 import logging
 import logstash
 import ecs_logging
+from logstash_async.handler import AsynchronousLogstashHandler
 
 
 
@@ -43,11 +44,11 @@ class Logger:
             # Add the handler to our custom logger.
             self._logger.addHandler(file_handler)
         elif self._log_type == 'DB':
-            host = 'localhost'
+            host = '10.2.218.61'
             port = 5000
             self._logger = logging.getLogger('python-logstash-logger')
 
-            self._logger.addHandler(logstash.TCPLogstashHandler(host, port, version=1))
+            self._logger.addHandler(AsynchronousLogstashHandler(host, port, database_path=None))
         else:
             raise ValueError(
                 f'Unknown log type: {self._log_type}.\n'
